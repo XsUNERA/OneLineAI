@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+  <!-- White rounded background -->
+  <rect x="5" y="5" width="90" height="90" rx="22" fill="#f0f2f5" />
+  
+  <!-- Dark forward slash -->
+  <line x1="38" y1="76" x2="62" y2="24" stroke="#212224" stroke-width="12" stroke-linecap="round" />
+</svg>
