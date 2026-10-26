@@ -14,8 +14,18 @@ const appShell = document.querySelector(".app-shell");
 const menuButton = document.getElementById("menu-button");
 const sidebarOverlay = document.getElementById("sidebar-overlay");
 
-// Backend URL
-const API_URL = "http://127.0.0.1:5000/chat";
+// Backend URL:
+// 1. In production (Vercel deployment or custom domain) or 'vercel dev' (port 3000), use relative "/api/chat"
+// 2. In local development (Live Server on port 5500/5501, file://), fall back to local Flask server
+const isLocalStaticServer =
+    window.location.protocol === "file:" ||
+    ((window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") &&
+     window.location.port !== "" &&
+     window.location.port !== "3000");
+
+const API_URL = isLocalStaticServer
+    ? "http://127.0.0.1:5000/api/chat"
+    : "/api/chat";
 
 // Local storage keys
 const STORAGE_KEY = "oneline_ai_conversations";

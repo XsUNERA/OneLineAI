@@ -15,16 +15,39 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Read the API key securely from the environment
-api_key = os.getenv("GROQ_API_KEY")
+_groq_client = None
 
-if not api_key:
-    raise RuntimeError("GROQ_API_KEY is missing from your .env file")
 
-client = Groq(api_key=api_key)
+def get_client():
+    global _groq_client
+    api_key = os.getenv("GROQ_API_KEY")
+    if not api_key:
+        return None
+    if _groq_client is None:
+        _groq_client = Groq(api_key=api_key)
+    return _groq_client
+
+
+@app.route("/", methods=["GET"])
+@app.route("/api", methods=["GET"])
+@app.route("/api/", methods=["GET"])
+def health():
+    return jsonify({
+        "status": "healthy",
+        "service": "OneLine AI API (Local Backend)",
+        "message": "Backend is running successfully."
+    })
 
 
 @app.route("/chat", methods=["POST"])
+@app.route("/api/chat", methods=["POST"])
 def chat():
+    client = get_client()
+    if not client:
+        return jsonify({
+            "error": "GROQ_API_KEY is missing from your .env file."
+        }), 500
+
     data = request.get_json(silent=True) or {}
     prompt = data.get("message", "").strip()
 
@@ -62,4 +85,4 @@ def chat():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=5000)
