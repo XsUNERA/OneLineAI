@@ -32,8 +32,10 @@ env/
 .env*.local
 *.env
 
-# Vercel output
+# Vercel & Node output
 .vercel/
+node_modules/
+package-lock.json
 
 # IDE & Editor files
 .vscode/
